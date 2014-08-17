@@ -17,6 +17,7 @@ import (
 	"os"
 	"os/exec"
 	"os/signal"
+	"runtime"
 	"syscall"
 	"time"
 )
@@ -76,6 +77,23 @@ func BasicWrap(f HandlerFunc) (int, error) {
 	return Wrap(&WrapConfig{
 		Handler: f,
 	})
+}
+
+func BasicMonitor(f HandlerFunc) error {
+	exitStatus, err := Wrap(&WrapConfig{
+		Handler: f,
+		Monitor: runtime.GOOS != "windows",
+	})
+
+	if err != nil {
+		return err
+	}
+
+	if exitStatus >= 0 {
+		os.Exit(exitStatus)
+	}
+
+	return nil
 }
 
 // Wrap wraps the current executable in a handler to catch panics. It
