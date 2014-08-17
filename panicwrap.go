@@ -79,6 +79,12 @@ func BasicWrap(f HandlerFunc) (int, error) {
 	})
 }
 
+// BasicMonitor calls Wrap with Monitor set to true on supported platforms.
+// It forks your program and runs it again form the start. In one process
+// BasicMonitor never returns, it just listens on stderr of the other process,
+// and calls your handler when a panic is seen. In the other it either returns
+// nil to indicate that the panic monitoring is enabled, or an error to indicate
+// that something else went wrong.
 func BasicMonitor(f HandlerFunc) error {
 	exitStatus, err := Wrap(&WrapConfig{
 		Handler: f,
