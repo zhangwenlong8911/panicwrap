@@ -3,7 +3,7 @@
 package panicwrap
 
 import (
-	"github.com/mitchellh/osext"
+	"github.com/bugsnag/osext"
 	"os"
 	"os/exec"
 	"syscall"
