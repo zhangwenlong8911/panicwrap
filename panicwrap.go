@@ -12,7 +12,7 @@ package panicwrap
 import (
 	"bytes"
 	"errors"
-	"github.com/mitchellh/osext"
+	"github.com/bugsnag/osext"
 	"io"
 	"os"
 	"os/exec"
