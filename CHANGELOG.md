@@ -1,3 +1,11 @@
+## 1.2.1 (2020-12-04)
+
+### Bug fixes
+
+* Fix compatibility with solaris and friends (AIX, etc)
+  [Till Wegmüller](https://github.com/Toasterson)
+  [#11](https://github.com/bugsnag/panicwrap/pull/11)
+
 ## 1.2.0 (2017-08-08)
 
 ### Bug fixes
