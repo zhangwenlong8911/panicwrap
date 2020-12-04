@@ -1,11 +1,11 @@
-// +build linux,arm64
+//+build linux,arm64
 
 package panicwrap
 
 import (
-	"syscall"
+	"golang.org/x/sys/unix"
 )
 
 func dup2(oldfd, newfd int) error {
-	return syscall.Dup3(oldfd, newfd, 0)
+	return unix.Dup3(oldfd, newfd, 0)
 }
