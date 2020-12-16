@@ -263,7 +263,7 @@ func trackPanic(r io.Reader, w io.Writer, dur time.Duration, result chan<- strin
 	panicBuf := new(bytes.Buffer)
 	panicHeaders := [][]byte{
 		[]byte("panic:"),
-		[]byte("fatal error: fault"),
+		[]byte("fatal error:"),
 	}
 	panicType := -1
 
@@ -272,7 +272,7 @@ func trackPanic(r io.Reader, w io.Writer, dur time.Duration, result chan<- strin
 		var buf []byte
 		var n int
 
-		if panicTimer == nil && panicBuf.Len() > 0 {
+		if panicType >= 0 && panicTimer == nil && panicBuf.Len() > 0 {
 			// We're not tracking a panic but the buffer length is
 			// greater than 0. We need to clear out that buffer, but
 			// look for another panic along the way.
@@ -322,6 +322,7 @@ func trackPanic(r io.Reader, w io.Writer, dur time.Duration, result chan<- strin
 			continue
 		}
 
+		// Check if the contents of buf starts with a header
 		panicType = -1
 		flushIdx := n
 		for i, header := range panicHeaders {
