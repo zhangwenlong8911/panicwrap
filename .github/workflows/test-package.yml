@@ -23,8 +23,12 @@ jobs:
         curl --silent --location --output gimme https://github.com/travis-ci/gimme/raw/v1.5.4/gimme
         chmod +x ./gimme
         eval "$(./gimme ${{ matrix.go-version }})"
-    - name: set GOPATH
-      run: echo "GOPATH=$GITHUB_WORKSPACE/go" >> $GITHUB_ENV
+        echo "GOOS=" >> $GITHUB_ENV
+        echo "GOARCH=" >> $GITHUB_ENV
+        echo "GOROOT=$GOROOT" >> $GITHUB_ENV
+        echo "PATH=$PATH" >> $GITHUB_ENV
+        echo "GIMME_ENV=$GIMME_ENV" >> $GITHUB_ENV
+        echo "GOPATH=$GITHUB_WORKSPACE/go" >> $GITHUB_ENV
     - name: install dependencies
       run: go get -v -d ./...
     - name: run tests
