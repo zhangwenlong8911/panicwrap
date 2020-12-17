@@ -3,9 +3,9 @@
 package panicwrap
 
 import (
-	"golang.org/x/sys/unix"
+	"syscall"
 )
 
 func dup2(oldfd, newfd int) error {
-	return unix.Dup3(oldfd, newfd, 0)
+	return syscall.Dup3(oldfd, newfd, 0)
 }

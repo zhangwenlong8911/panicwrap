@@ -1,3 +1,9 @@
+## TBD
+
+### Bug fixes
+
+* Fix compatibility with go1.7-1.8 by removing dependency on "math/bits" package
+
 ## 1.2.1 (2020-12-04)
 
 ### Bug fixes
