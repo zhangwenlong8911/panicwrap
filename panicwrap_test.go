@@ -119,6 +119,55 @@ func TestHelperProcess(*testing.T) {
 		}
 
 		os.Exit(exitStatus)
+	case "stack exhaustion":
+		exitStatus, err := BasicWrap(panicHandler)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "wrap error: %s", err)
+			os.Exit(1)
+		}
+
+		if exitStatus < 0 {
+			var f func(a [1000]int64)
+			f = func(a [1000]int64) {
+				f(a)
+			}
+			f([1000]int64{})
+		}
+
+	case "nil goroutine":
+		exitStatus, err := BasicWrap(panicHandler)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "wrap error: %s", err)
+			os.Exit(1)
+		}
+
+		if exitStatus < 0 {
+			var f func()
+			go f()
+		}
+
+		os.Exit(exitStatus)
+	case "concurrent map write":
+		exitStatus, err := BasicWrap(panicHandler)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "wrap error: %s", err)
+			os.Exit(1)
+		}
+
+		if exitStatus < 0 {
+			m := map[string]int{}
+
+			go func() {
+				for {
+					m["x"] = 1
+				}
+			}()
+			for {
+				_ = m["x"]
+			}
+		}
+
+		os.Exit(exitStatus)
 	case "panic":
 		hidePanic := false
 		if args[0] == "hide" {
@@ -286,6 +335,51 @@ func TestPanicWrap_panicLong(t *testing.T) {
 	stdout := new(bytes.Buffer)
 
 	p := helperProcess("panic-long")
+	p.Stdout = stdout
+	p.Stderr = new(bytes.Buffer)
+	if err := p.Run(); err != nil {
+		t.Fatalf("err: %s", err)
+	}
+
+	if !strings.Contains(stdout.String(), "wrapped:") {
+		t.Fatalf("didn't wrap: %#v", stdout.String())
+	}
+}
+
+func TestPanicWrap_nilGoroutine(t *testing.T) {
+	stdout := new(bytes.Buffer)
+
+	p := helperProcess("nil goroutine")
+	p.Stdout = stdout
+	p.Stderr = new(bytes.Buffer)
+	if err := p.Run(); err != nil {
+		t.Fatalf("err: %s", err)
+	}
+
+	if !strings.Contains(stdout.String(), "wrapped:") {
+		t.Fatalf("didn't wrap: %#v", stdout.String())
+	}
+}
+
+func TestPanicWrap_stackExhaustion(t *testing.T) {
+	stdout := new(bytes.Buffer)
+
+	p := helperProcess("stack exhaustion")
+	p.Stdout = stdout
+	p.Stderr = new(bytes.Buffer)
+	if err := p.Run(); err != nil {
+		t.Fatalf("err: %s", err)
+	}
+
+	if !strings.Contains(stdout.String(), "wrapped:") {
+		t.Fatalf("didn't wrap: %#v", stdout.String())
+	}
+}
+
+func TestPanicWrap_concurrentMapWrite(t *testing.T) {
+	stdout := new(bytes.Buffer)
+
+	p := helperProcess("concurrent map write")
 	p.Stdout = stdout
 	p.Stderr = new(bytes.Buffer)
 	if err := p.Run(); err != nil {

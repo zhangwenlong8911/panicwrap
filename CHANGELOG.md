@@ -1,3 +1,11 @@
+## TBD
+
+### Features
+
+* Support capturing fatal errors from concurrent map writes, nil goroutines,
+  out of memory errors, stack exhaustion, and others which use a different panic
+  output format.
+
 ## 1.2.2 (2020-12-17)
 
 ### Bug fixes
