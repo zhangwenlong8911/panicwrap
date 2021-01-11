@@ -1,3 +1,9 @@
+## TBD
+
+### Bug fixes
+
+* Fix windows support by removing undefined syscall
+
 ## 1.3.0 (2021-01-05)
 
 ### Features
