@@ -1,4 +1,7 @@
-## TBD
+## 1.3.1 (2021-01-12)
+
+This release removes the dependency on [osext](https://github.com/kardianos/osext)
+for everyone running go1.8+.
 
 ### Bug fixes
 
