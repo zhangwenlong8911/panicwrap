@@ -1,3 +1,11 @@
+## TBD
+
+### Bug fixes
+
+* Fix build support for arm64 linux by updating build settings for `dup2()`
+  [Robert-André Mauchin](https://github.com/eclipseo)
+  [#21](https://github.com/bugsnag/panicwrap/pull/21)
+
 ## 1.3.2 (2021-03-25)
 
 ### Bug fixes

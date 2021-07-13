@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"runtime"
 	"strings"
 	"testing"
 	"time"
@@ -377,6 +378,9 @@ func TestPanicWrap_stackExhaustion(t *testing.T) {
 }
 
 func TestPanicWrap_concurrentMapWrite(t *testing.T) {
+	if runtime.GOARCH == "arm64" && runtime.GOOS == "linux" {
+		t.Skip("unsupported on this architecture")
+	}
 	stdout := new(bytes.Buffer)
 
 	p := helperProcess("concurrent map write")
